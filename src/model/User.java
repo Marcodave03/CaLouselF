@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 public class User {
 	private String User_id; 
 	private String Username;
@@ -8,9 +10,9 @@ public class User {
     private String Address;
     private String Role;
     
-	public User(String user_Id, String username, String password, String phone_Number, String address, String role) {
+	public User(String username, String password, String phone_Number, String address, String role) {
 		super();
-		User_id = user_Id;
+		this.User_id = generateUserId();
 		Username = username;
 		Password = password;
 		Phone_Number = phone_Number;
@@ -18,6 +20,9 @@ public class User {
 		Role = role;
 	}
 
+	private String generateUserId() {
+        return UUID.randomUUID().toString(); 
+    }
 	
 	public String getUser_id() {
 		return User_id;

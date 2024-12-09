@@ -34,7 +34,7 @@ public class LoginPage {
 	public LoginPage(Stage primaryStage) {
 		init();
 		arrange();
-		eventHandler(primaryStage);
+//		eventHandler(primaryStage);
 		primaryStage.setScene(scene);
 	}
 
@@ -82,29 +82,29 @@ public class LoginPage {
 		bp.setCenter(vb);
 	}
 	
-	private void eventHandler(Stage primaryStage) 
-	{
-		loginBtn.setOnAction(e -> {
-			String username = usernameTf.getText();
-			String password = passwordField.getText();
-			
-			User user = UserController.Login(username, password);
-			
-			if (user == null) {
-		        errorLbl.setText("Invalid username or password.");
-		    } else if (user.getRole().equals("admin")) {
-		        new AdminHomePage(primaryStage);
-		    } else if (user.getRole().equals("Seller")) {
-		        new SellerHomePage(primaryStage, user);
-		    } else if(user.getRole().equals("Buyer")) {
-		    	new BuyerHomePage(primaryStage, user);
-		    }
-		});
-		
-		registerLink.setOnAction(e -> {
-            new RegisterPage(primaryStage);
-        });
-	}
+//	private void eventHandler(Stage primaryStage) 
+//	{
+//		loginBtn.setOnAction(e -> {
+//			String username = usernameTf.getText();
+//			String password = passwordField.getText();
+//			
+//			User user = UserController.Login(username, password);
+//			
+//			if (user == null) {
+//		        errorLbl.setText("Invalid username or password.");
+//		    } else if (user.getRole().equals("admin")) {
+//		        new AdminHomePage(primaryStage);
+//		    } else if (user.getRole().equals("Seller")) {
+//		        new SellerHomePage(primaryStage, user);
+//		    } else if(user.getRole().equals("Buyer")) {
+//		    	new BuyerHomePage(primaryStage, user);
+//		    }
+//		});
+//		
+//		registerLink.setOnAction(e -> {
+//            new RegisterPage(primaryStage);
+//        });
+//	}
 	
 	public Scene getScene() {
         return scene;

@@ -35,6 +35,8 @@ public class RegisterPage {
 	private Label loginLbl;
 	private Hyperlink loginLink;
 	private Label errorLbl;
+	
+	private UserController userController;
 
 	public RegisterPage(Stage primaryStage) {
 		init();
@@ -68,6 +70,7 @@ public class RegisterPage {
 		registerBtn = new Button("Register");
 		loginLbl = new Label("Already have an account?");
 		loginLink = new Hyperlink("Login");
+		
 	}
 
 	private void arrange() {
@@ -111,24 +114,26 @@ public class RegisterPage {
 	private void eventHandler(Stage primaryStage) {
 		registerBtn.setOnAction(e -> {
 			String username = usernameTf.getText();
-			String password = passwordField.getText();
-			String phoneNumber = phoneNumberTf.getText();
-			String address = addressTf.getText();
-			Toggle selectedToggle = roleGroup.getSelectedToggle();
-			String role = (selectedToggle != null) ? ((RadioButton) selectedToggle).getText() : null;
+	        String password = passwordField.getText();
+	        String phoneNumber = phoneNumberTf.getText();
+	        String address = addressTf.getText();
+	        Toggle selectedToggle = roleGroup.getSelectedToggle();
+	        String role = (selectedToggle != null) ? ((RadioButton) selectedToggle).getText() : null;
+	        
+	        String validation = UserController.CheckAccountValidation(username, password, phoneNumber, address, role);
+	        if (!validation.isEmpty()) {
+	            errorLbl.setText(validation);  
+	            return;
+	        }
 
-			String validation = UserController.CheckAccountValidation(username, password, phoneNumber, address, role);
-			if (!validation.isEmpty()) {
-				errorLbl.setText(validation);
-				return;
-			}
-			User user = UserController.Register(username, password, phoneNumber, address, role);
+	        userController.register(username, password, phoneNumber, address, role);
 
-			if (user.getRole().equals("Buyer")) {
-				new BuyerHomePage(primaryStage, user);
-			} else  {
-				new SellerHomePage(primaryStage, user);
-			}
+	        User user = new User(username, password, phoneNumber, address, role);  // Pass the created user object
+	        if (role.equals("Buyer")) {
+	            new BuyerHomePage(primaryStage, user);
+	        } else {
+	            new SellerHomePage(primaryStage, user);
+	        }
 		});
 
 		loginLink.setOnAction(e -> {
