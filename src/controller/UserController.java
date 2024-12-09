@@ -13,12 +13,10 @@ public class UserController {
 	private UserDAO userDAO;
 	
 	
+	
 	public UserController(UserDAO userDAO) {
 		super();
 		this.userDAO = userDAO;
-	}
-
-	public UserController(Stage primaryStage) {
 	}
 
 	//1. Register

@@ -1,4 +1,4 @@
-	package view;
+package view;
 
 import controller.UserController;
 import javafx.geometry.Pos;
@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
+import util.UserDAO;
 import view.Admin.AdminHomePage;
 import view.Seller.SellerHomePage;
 
@@ -30,6 +31,8 @@ public class LoginPage {
 	private Label registerLbl;
 	private Hyperlink registerLink;
 	private Label errorLbl;
+	
+	private UserController userController;
 
 	public LoginPage(Stage primaryStage) {
 		init();
@@ -59,6 +62,8 @@ public class LoginPage {
 		loginBtn = new Button("Login");
 		registerLbl = new Label("New Here?");
 		registerLink = new Hyperlink("Register");
+		UserDAO userDAO = new UserDAO();
+		userController = new UserController(userDAO);
 	}
 
 	private void arrange() {

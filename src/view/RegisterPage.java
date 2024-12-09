@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
+import util.UserDAO;
 import view.Seller.SellerHomePage;
 
 public class RegisterPage {
@@ -70,6 +71,8 @@ public class RegisterPage {
 		registerBtn = new Button("Register");
 		loginLbl = new Label("Already have an account?");
 		loginLink = new Hyperlink("Login");
+		UserDAO userDAO = new UserDAO();
+		userController = new UserController(userDAO);
 		
 	}
 

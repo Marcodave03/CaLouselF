@@ -38,7 +38,7 @@ public class Connect {
 		}
 	}
 	
-	public ResultSet execute (String query) {
+	public ResultSet execute(String query) {
 		try {
 			resultSet = state.executeQuery(query);
 			resultSetMetaData = resultSet.getMetaData();
