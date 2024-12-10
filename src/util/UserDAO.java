@@ -1,6 +1,7 @@
 package util;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import model.User;
 
@@ -22,4 +23,18 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public ResultSet login(String username, String password) {
+        String query = "SELECT * FROM users WHERE Username = ? AND Password = ?";
+        ResultSet resultSet = null;
+        try (PreparedStatement ps = connect.preparedStatement(query)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            resultSet = ps.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+	
 }

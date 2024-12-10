@@ -74,6 +74,32 @@ public class UserController {
 		return null;
 	}
 
+//	public static User Login(String username, String password) {
+//		if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+//	        return null; 
+//	    }
+//		if (username.equals("admin") && password.equals("admin")) {
+//			return new User("0", "admin", "admin", "", "");
+//		}
+//
+//		ResultSet resultSet = userDAO.login(username, password);
+//
+//		try {
+//	        if (resultSet.next()) {
+//	            Integer user_id = resultSet.getInt("User_id");
+//	            String dbUsername = resultSet.getString("Username");
+//	            String role = resultSet.getString("Role");
+//	            System.out.println("User found: " + dbUsername + " with role " + role);  // Debugging output
+//	            return new User(user_id.toString(), dbUsername, password, "", "");
+//	        }
+//	    } catch (SQLException e) {
+//	        e.printStackTrace();
+//	    }
+//		
+//		return null;
+//	}
+
+
 	
 	//3. CheckAcccountValidation	
 	public static String CheckAccountValidation(String username, String password, String phoneNumber, String address,
