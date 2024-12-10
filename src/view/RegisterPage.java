@@ -134,13 +134,13 @@ public class RegisterPage {
 	        User user = new User(username, password, phoneNumber, address, role);  // Pass the created user object
 	        if (role.equals("Buyer")) {
 	            new BuyerHomePage(primaryStage, user);
-	        } else {
+	        } else if(role.equals("Seller")){
 	            new SellerHomePage(primaryStage, user);
 	        }
 		});
 
 		loginLink.setOnAction(e -> {
-			new LoginPage(primaryStage);
+			new LoginPage(primaryStage, userController);
 		});
 	}
 

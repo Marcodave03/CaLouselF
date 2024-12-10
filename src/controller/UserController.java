@@ -48,49 +48,23 @@ public class UserController {
 
 
 	//2. Login
-	public static User Login(String username, String password) {
-		if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-	        return null; 
-	    }
-		if (username.equals("admin") && password.equals("admin")) {
-			return new User("0", "admin", "admin", "", "");
-		}
-
-		String query = "SELECT * FROM users WHERE Username = '" + username + "' AND Password = '" + password + "'";
-		ResultSet resultSet = connect.execute(query);
-
-		try {
-	        if (resultSet.next()) {
-	            Integer user_id = resultSet.getInt("User_id");
-	            String dbUsername = resultSet.getString("Username");
-	            String role = resultSet.getString("Role");
-	            System.out.println("User found: " + dbUsername + " with role " + role);  // Debugging output
-	            return new User(user_id.toString(), dbUsername, password, "", "");
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-		
-		return null;
-	}
-
 //	public static User Login(String username, String password) {
 //		if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
 //	        return null; 
 //	    }
 //		if (username.equals("admin") && password.equals("admin")) {
-//			return new User("0", "admin", "admin", "", "");
+//			return new User("admin", "admin", "", "", "admin");
 //		}
 //
-//		ResultSet resultSet = userDAO.login(username, password);
+//		String query = "SELECT * FROM users WHERE Username = '" + username + "' AND Password = '" + password + "'";
+//		ResultSet resultSet = connect.execute(query);
 //
 //		try {
 //	        if (resultSet.next()) {
-//	            Integer user_id = resultSet.getInt("User_id");
 //	            String dbUsername = resultSet.getString("Username");
 //	            String role = resultSet.getString("Role");
 //	            System.out.println("User found: " + dbUsername + " with role " + role);  // Debugging output
-//	            return new User(user_id.toString(), dbUsername, password, "", "");
+//	            return new User(dbUsername, password, "", "", role);
 //	        }
 //	    } catch (SQLException e) {
 //	        e.printStackTrace();
@@ -98,6 +72,17 @@ public class UserController {
 //		
 //		return null;
 //	}
+
+	public User login(String username, String password) {
+	    if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+	        return null;
+	    }
+	    if (username.equals("admin") && password.equals("admin")) {
+	        return new User("0", "admin", "admin", "", "admin");
+	    }
+
+	    return userDAO.login(username, password);
+	}
 
 
 	
