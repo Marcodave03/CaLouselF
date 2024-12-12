@@ -1,6 +1,8 @@
 package view;
 
 import controller.ItemController;
+import controller.TransactionController;
+import controller.WishlistController;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -34,11 +37,18 @@ public class BuyerHomePage {
 	private TableColumn<Item, Void> actionCol;
 
 	private ItemController itemController;
+	private WishlistController wishlistController;
+	private TransactionController transactionController;
 	private User user;
+	private Hyperlink WishlistLink;
+	private Hyperlink AllItemLink;
+	private Hyperlink TransactionLink;
 
 	public BuyerHomePage(Stage primaryStage) {
 		this.user = SessionManager.getCurrentUser();
 		itemController = new ItemController();
+		wishlistController = new WishlistController();
+		transactionController = new TransactionController();
 		init();
 		arrange();
 		eventHandler(primaryStage);
@@ -55,6 +65,15 @@ public class BuyerHomePage {
 		sizeCol = new TableColumn<>("Size");
 		priceCol = new TableColumn<>("Price");
 		actionCol = new TableColumn<>("Action");
+		
+		HBox navbar = new HBox(20);
+		WishlistLink = new Hyperlink("Wishlist");
+	    AllItemLink = new Hyperlink("All Items");
+	    TransactionLink = new Hyperlink("Transaction History");
+        navbar.getChildren().addAll(AllItemLink, WishlistLink, TransactionLink);
+        navbar.setAlignment(Pos.CENTER);
+        navbar.setPadding(new Insets(10));
+        bp.setTop(navbar);
 	}
 
 	private void arrange() {
@@ -74,11 +93,11 @@ public class BuyerHomePage {
 	}
 
 	private void eventHandler(Stage primaryStage) {
-//		addItemButton.setOnAction(e -> showAddItemForm(primaryStage));
 		actionCol.setCellFactory(param -> new TableCell<>() {
 			private final Button purchaseBtn = new Button("Purchase");
 			private final Button offerBtn = new Button("Make Offer");
-			private final HBox btnBox = new HBox(10, purchaseBtn, offerBtn);
+			private final Button WishlistBtn = new Button("Add to Wishlist");
+			private final HBox btnBox = new HBox(10, purchaseBtn, offerBtn,WishlistBtn);
 
 			{
 				btnBox.setAlignment(Pos.CENTER);
@@ -96,6 +115,58 @@ public class BuyerHomePage {
 					}
 				});
 			}
+			
+			{
+				btnBox.setAlignment(Pos.CENTER);
+
+				WishlistBtn.setOnAction(event -> {
+					Item item = getTableView().getItems().get(getIndex());
+					boolean success = wishlistController.AddWishlist(item.getItem_id(),user.getUser_id());
+					if (success) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Added to wishlist!", ButtonType.OK);
+						alert.showAndWait();
+						getTableView().refresh();
+					} else {
+						Alert alert = new Alert(Alert.AlertType.ERROR, "Error", ButtonType.OK);
+						alert.showAndWait();
+					}
+				});
+			}
+			
+
+			{
+				btnBox.setAlignment(Pos.CENTER);
+
+				purchaseBtn.setOnAction(event -> {
+					Item item = getTableView().getItems().get(getIndex());
+					boolean checked = wishlistController.CheckWishlist(item.getItem_id(),user.getUser_id());
+					boolean success = transactionController.AddTransaction(item.getItem_id(),user.getUser_id());
+					System.out.println(checked);
+					if (success) {
+				        if (checked) {
+				            boolean deleted = wishlistController.RemoveWishlist( user.getUser_id(),item.getItem_id());
+				            System.out.println("Deleted" + deleted);
+				            if (deleted) {
+				                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Purchase Successful! Wishlist removed.", ButtonType.OK);
+				                alert.showAndWait();
+				            } else {
+				                Alert alert = new Alert(Alert.AlertType.ERROR, "Error removing item from wishlist.", ButtonType.OK);
+				                alert.showAndWait();
+				            }
+				        } else {
+				            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Purchase Successful!", ButtonType.OK);
+				            alert.showAndWait();
+				        }
+				        getTableView().refresh();
+				    } else {
+				        Alert alert = new Alert(Alert.AlertType.ERROR, "Error processing the purchase.", ButtonType.OK);
+				        alert.showAndWait();
+				    }
+				});
+			}
+			
+
+			
 
 			@Override
 			protected void updateItem(Void unused, boolean empty) {
@@ -117,6 +188,16 @@ public class BuyerHomePage {
 				setAlignment(Pos.CENTER);
 			}
 		});
+		
+		WishlistLink.setOnAction(e -> {
+            new WishListPage(primaryStage);
+        });
+		AllItemLink.setOnAction(e -> {
+            new BuyerHomePage(primaryStage);
+        });
+		TransactionLink.setOnAction(e -> {
+            new TransactionHistoryPage(primaryStage);
+        });
 	}
 
 	public Scene getScene() {

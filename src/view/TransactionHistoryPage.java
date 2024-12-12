@@ -1,6 +1,7 @@
 package view;
 
 import controller.ItemController;
+import controller.TransactionController;
 import controller.WishlistController;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -20,10 +21,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Item;
 import model.User;
-import model.Wishlist;
 import session.SessionManager;
 
-public class WishListPage {
+public class TransactionHistoryPage {
 	private Scene scene;
 	private BorderPane bp;
 	private VBox vb;
@@ -32,18 +32,15 @@ public class WishListPage {
 	private TableColumn<Item, String> nameCol, categoryCol, sizeCol;
 	private TableColumn<Item, Integer> priceCol;
 	private TableColumn<Item, Void> actionCol;
-
-	private ItemController itemController;
-	private WishlistController wishlistController;
+	private TransactionController transactionController;
 	private User user;
 	private Hyperlink WishlistLink;
 	private Hyperlink AllItemLink;
 	private Hyperlink TransactionLink;
 
-	public WishListPage(Stage primaryStage) {
+	public TransactionHistoryPage(Stage primaryStage) {
 		this.user = SessionManager.getCurrentUser();
-		itemController = new ItemController();
-		wishlistController = new WishlistController();
+		transactionController = new TransactionController();
 		init();
 		arrange();
 		eventHandler(primaryStage);
@@ -79,8 +76,7 @@ public class WishListPage {
 		sizeCol.setCellValueFactory(new PropertyValueFactory<>("item_size"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<>("item_price"));
 
-		ObservableList<Item> itemList = wishlistController.ViewWishlist(user.getUser_id());
-		//ObservableList<Item> itemList = itemController.ViewItem();
+		ObservableList<Item> itemList = transactionController.Transactionlist(user.getUser_id());
 		itemTable.setItems(itemList);
 		System.out.println("User ID: " + user.getUser_id());
 		vb = new VBox(10, itemTable);
@@ -89,41 +85,7 @@ public class WishListPage {
 	}
 
 	private void eventHandler(Stage primaryStage) {
-	    actionCol.setCellFactory(param -> new TableCell<>() {
-	        private final Button removeBtn = new Button("Remove");
-	        private final HBox btnBox = new HBox(10, removeBtn);
-
-	        {
-	            btnBox.setAlignment(Pos.CENTER);
-	            removeBtn.setOnAction(event -> {
-	            	Item item = getTableView().getItems().get(getIndex());
-	                boolean success = wishlistController.RemoveWishlist(user.getUser_id(),item.getItem_id());
-	                if (success) {
-	                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Removed from wishlist!", ButtonType.OK);
-	                    alert.showAndWait();
-	                    getTableView().refresh(); // Refresh the table to show the updated list
-	                } else {
-	                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error removing item from wishlist.", ButtonType.OK);
-	                    alert.showAndWait();
-	                }
-	            });
-	        }
-
-	        @Override
-	        protected void updateItem(Void unused, boolean empty) {
-	            super.updateItem(unused, empty);
-
-	            if (empty || getTableView().getItems().get(getIndex()) == null) {
-	                setGraphic(null);
-	                return;
-	            }
-
-	            setGraphic(btnBox); 
-	            setAlignment(Pos.CENTER);
-	        }
-	    });
-		
-	    WishlistLink.setOnAction(e -> {
+		WishlistLink.setOnAction(e -> {
             new WishListPage(primaryStage);
         });
 		AllItemLink.setOnAction(e -> {
