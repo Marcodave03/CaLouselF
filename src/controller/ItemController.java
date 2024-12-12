@@ -14,12 +14,6 @@ public class ItemController {
 		String query = "INSERT INTO item (item_id, item_name, item_category, item_size, item_price, item_status, item_wishlist, item_offer_status, User_id) "
 	             + "VALUES ('0', '" + Item_name + "', '" + Item_category + "', '" + Item_size + "', " + Item_price 
 	             + ", 'pending', '', '', '" + Integer.parseInt(User_id) + "')";
-		
-//		String query = "INSERT INTO item (item_id, item_name, item_category, item_size, item_price, item_status, item_wishlist, item_offer_status, User_id) "
-//	             + "VALUES ('0', '" + Item_name + "', '" + Item_category + "', '" + Item_size + "', " + Item_price 
-//	             + ", 'pending', '', '', '" + User_id + "')";
-
-
 		try {
 			connect.executeUpdate(query);
 			return true;
@@ -37,13 +31,6 @@ public class ItemController {
                 + "item_size = '" + Item_size + "', "
                 + "item_price = " + Item_price
                 + " WHERE item_id = '" + Item_id + "'";
-		
-//		String query = "UPDATE item SET "
-//                + "item_name = '" + Item_name + "', "
-//                + "item_category = '" + Item_category + "', "
-//                + "item_size = '" + Item_size + "', "
-//                + "item_price = " + Item_price
-//                + " WHERE item_id = '" + Item_id + "'";
 
 		try {
 			connect.executeUpdate(query);
@@ -151,6 +138,16 @@ public class ItemController {
 	}
 	
 	//7. Offer Price
+	public boolean OfferItem(String Item_id) {
+		String query = "UPDATE item SET item_offer_status = 'true' WHERE Item_id = '" + Item_id + "'";
+		try {
+			connect.executeUpdate(query);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	//8. Accept Offer
 	

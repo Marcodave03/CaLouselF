@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Item;
 import model.User;
+import session.SessionManager;
 
 public class BuyerHomePage {
 	private Scene scene;
@@ -35,8 +36,8 @@ public class BuyerHomePage {
 	private ItemController itemController;
 	private User user;
 
-	public BuyerHomePage(Stage primaryStage, User user) {
-		this.user = user;
+	public BuyerHomePage(Stage primaryStage) {
+		this.user = SessionManager.getCurrentUser();
 		itemController = new ItemController();
 		init();
 		arrange();
@@ -82,18 +83,18 @@ public class BuyerHomePage {
 			{
 				btnBox.setAlignment(Pos.CENTER);
 
-//				editBtn.setOnAction(event -> {
-//					Item item = getTableView().getItems().get(getIndex());
-//					showEditItemForm(primaryStage, item);
-//				});
-//
-//				deleteBtn.setOnAction(event -> {
-//					Item item = getTableView().getItems().get(getIndex());
-//					boolean success = itemController.DeleteItem(item.getItem_id());
-//					if (success) {
-//						getTableView().getItems().remove(item);
-//					}
-//				});
+				offerBtn.setOnAction(event -> {
+					Item item = getTableView().getItems().get(getIndex());
+					boolean success = itemController.OfferItem(item.getItem_id());
+					if (success) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Offer success!", ButtonType.OK);
+						alert.showAndWait();
+						getTableView().refresh();
+					} else {
+						Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to make the offer.", ButtonType.OK);
+						alert.showAndWait();
+					}
+				});
 			}
 
 			@Override
@@ -101,23 +102,22 @@ public class BuyerHomePage {
 				super.updateItem(unused, empty);
 
 				if (empty || getTableView().getItems().get(getIndex()) == null) {
-			        setGraphic(null);
-			        return;
-			    }
+					setGraphic(null);
+					return;
+				}
 				
 				Item currentItem = getTableView().getItems().get(getIndex());
 				String status = currentItem.getItem_status();
 				
 				if ("approved".equalsIgnoreCase(status)) {
-			        setGraphic(btnBox);
-			    } else {
-			        setGraphic(null);
-			    }
-			    setAlignment(Pos.CENTER);
+					setGraphic(btnBox);
+				} else {
+					setGraphic(null);
+				}
+				setAlignment(Pos.CENTER);
 			}
 		});
 	}
-
 
 	public Scene getScene() {
 		return scene;

@@ -221,7 +221,7 @@ public class LoginPage {
                         new SellerHomePage(primaryStage);
                         break;
                     case "buyer":
-                        new BuyerHomePage(primaryStage, user);
+                        new BuyerHomePage(primaryStage);
                         break;
                     default:
                         errorLbl.setText("Unknown role. Unable to navigate" + user.getRole());

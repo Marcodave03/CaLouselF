@@ -195,6 +195,7 @@ public class SellerHomePage {
 		formStage.show();
 	}
 	
+	
 	private void showEditItemForm(Stage parentStage, Item item) {
 		Stage formStage = new Stage();
 		formStage.setTitle("Edit Item");
