@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Item;
 import model.User;
+import session.SessionManager;
 
 public class SellerHomePage {
 	private Scene scene;
@@ -37,8 +38,8 @@ public class SellerHomePage {
 	private ItemController itemController;
 	private User user;
 
-	public SellerHomePage(Stage primaryStage, User user) {
-		this.user = user;
+	public SellerHomePage(Stage primaryStage) {
+		this.user = SessionManager.getCurrentUser();
 		itemController = new ItemController();
 		init();
 		arrange();
@@ -71,10 +72,19 @@ public class SellerHomePage {
 		statusCol.setCellValueFactory(new PropertyValueFactory<>("item_status"));
 
 		itemTable.getColumns().addAll(idCol, nameCol, categoryCol, sizeCol, priceCol, statusCol, actionCol);
-
-		ObservableList<Item> itemList = itemController.ViewSellerItem(user.getUser_id());
+//		Integer userIdInt = Integer.parseInt(user.getUser_id());
+		String userIdString = user.getUser_id();
+		ObservableList<Item> itemList = itemController.ViewSellerItem(userIdString);
+		//ObservableList<Item> itemList = itemController.ViewSellerItem(userIdInt);
 		itemTable.setItems(itemList);
-		System.out.println("User ID: " + user.getUser_id());
+		if (user.getUser_id() == null || user.getUser_id().isEmpty()) {
+		    System.out.println("User ID failed to pass");
+		} else {
+		    System.out.println("User ID is: " + user.getUser_id());
+		}
+		System.out.println("User being passed to SellerPage: " + user.getRole());
+		System.out.println("User being passed to SellerPage: " + user.getUsername());
+		//System.out.println("User ID  being passed to SellerPage: " + userIdString);
 		vb = new VBox(10, addItemButton, itemTable);
 		vb.setPadding(new Insets(10));
 		bp.setCenter(vb);

@@ -129,6 +129,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
+import session.SessionManager;
 import view.Admin.AdminHomePage;
 import view.Seller.SellerHomePage;
 
@@ -206,16 +207,28 @@ public class LoginPage {
             String password = passwordField.getText();
 
             User user = userController.login(username, password);
-
+            
             if (user == null) {
                 errorLbl.setText("Invalid username or password.");
-            } else if (user.getRole().equalsIgnoreCase("admin")) {
-                new AdminHomePage(primaryStage);
-            } else if (user.getRole().equalsIgnoreCase("Seller")) {
-                new SellerHomePage(primaryStage, user);
-            } else if (user.getRole().equalsIgnoreCase("Buyer")) {
-                new BuyerHomePage(primaryStage, user);
+            } else {
+                SessionManager.setCurrentUser(user);
+
+                switch (user.getRole().toLowerCase()) {
+                    case "admin":
+                        new AdminHomePage(primaryStage);
+                        break;
+                    case "seller":
+                        new SellerHomePage(primaryStage);
+                        break;
+                    case "buyer":
+                        new BuyerHomePage(primaryStage, user);
+                        break;
+                    default:
+                        errorLbl.setText("Unknown role. Unable to navigate" + user.getRole());
+                }
             }
+
+
         });
 
         registerLink.setOnAction(e -> {

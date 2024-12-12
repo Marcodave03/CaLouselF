@@ -40,18 +40,22 @@ public class UserDAO {
 
 	
 	public User login(String username, String password) {
-	    String query = "SELECT * FROM users WHERE Username = ? AND Password = ?";
+		if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+	        return null;
+	    }
+		 String query = "SELECT * FROM users WHERE Username = ? AND Password = ?";
 	    try (PreparedStatement ps = connect.preparedStatement(query)) {
 	        ps.setString(1, username);
 	        ps.setString(2, password);
 
 	        try (ResultSet resultSet = ps.executeQuery()) {
 	            if (resultSet.next()) {
+	            	String userId = resultSet.getString("User_ID");
 	                String dbUsername = resultSet.getString("Username");
 	                String dbPhone = resultSet.getString("Phone_Number");
-	                String role = resultSet.getString("Role");
+	                String dbRole = resultSet.getString("Role");
 	                String dbAddress = resultSet.getString("Address");
-	                return new User("",dbUsername, password, dbPhone , role, dbAddress);
+	                return new User(userId,dbUsername, password, dbPhone , dbAddress, dbRole);
 	            }
 	        }
 	    } catch (Exception e) {

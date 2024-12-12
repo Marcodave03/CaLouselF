@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.stage.Stage;
 import model.User;
+import session.SessionManager;
 
 public class UserController {
 	private static Connect connect = Connect.getInstance();
@@ -80,14 +81,18 @@ public class UserController {
 //	}
 
 	public User login(String username, String password) {
-	    if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-	        return null;
+	    if ("admin".equals(username) && "admin".equals(password)) {
+	        User adminUser = new User("0", "admin", "admin", "admin", "admin", "admin");
+	        SessionManager.setCurrentUser(adminUser);
+	        return adminUser;
 	    }
-	    if (username.equals("admin") && password.equals("admin")) {
-	        return new User("0", "admin", "admin", "", "admin","");
+	    else {
+	    	 User user = userDAO.login(username, password);
+	 	    if (user != null) {
+	 	        SessionManager.setCurrentUser(user);
+	 	    }
+	 	    return user;
 	    }
-
-	    return userDAO.login(username, password);
 	}
 
 
