@@ -41,9 +41,15 @@ public class UserController {
 //	    return null;
 //	}
 	
-	public void register(String username, String password, String phoneNumber, String address, String role) {
-		User newUser = new User(username,password,phoneNumber,address,role);
-		userDAO.register(newUser);
+	public boolean register(String username, String password, String phoneNumber, String address, String role) {		
+		try {
+            User newUser = new User("0", username, password, phoneNumber, address, role);
+            userDAO.register(newUser);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 
 
@@ -78,7 +84,7 @@ public class UserController {
 	        return null;
 	    }
 	    if (username.equals("admin") && password.equals("admin")) {
-	        return new User("0", "admin", "admin", "", "admin");
+	        return new User("0", "admin", "admin", "", "admin","");
 	    }
 
 	    return userDAO.login(username, password);

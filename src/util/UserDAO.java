@@ -2,6 +2,7 @@ package util;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import model.User;
 
@@ -19,10 +20,24 @@ public class UserDAO {
 			ps.setString(5,user.getRole());
 			ps.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public String getId() {
+		try {
+			String getIdQuery = "SELECT LAST_INSERT_ID() AS user_id";
+			ResultSet resultSet = connect.execute(getIdQuery);
+			String id = resultSet.getString("user_id");
+			return id;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	
 	public User login(String username, String password) {
 	    String query = "SELECT * FROM users WHERE Username = ? AND Password = ?";
@@ -32,10 +47,11 @@ public class UserDAO {
 
 	        try (ResultSet resultSet = ps.executeQuery()) {
 	            if (resultSet.next()) {
-	                Integer user_id = resultSet.getInt("User_id");
 	                String dbUsername = resultSet.getString("Username");
+	                String dbPhone = resultSet.getString("Phone_Number");
 	                String role = resultSet.getString("Role");
-	                return new User(user_id.toString(), dbUsername, password, "", role);
+	                String dbAddress = resultSet.getString("Address");
+	                return new User("",dbUsername, password, dbPhone , role, dbAddress);
 	            }
 	        }
 	    } catch (Exception e) {

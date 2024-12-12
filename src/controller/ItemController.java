@@ -14,6 +14,11 @@ public class ItemController {
 		String query = "INSERT INTO item (item_id, item_name, item_category, item_size, item_price, item_status, item_wishlist, item_offer_status, User_id) "
 	             + "VALUES ('0', '" + Item_name + "', '" + Item_category + "', '" + Item_size + "', " + Item_price 
 	             + ", 'pending', '', '', '" + Integer.parseInt(User_id) + "')";
+		
+//		String query = "INSERT INTO item (item_id, item_name, item_category, item_size, item_price, item_status, item_wishlist, item_offer_status, User_id) "
+//	             + "VALUES ('0', '" + Item_name + "', '" + Item_category + "', '" + Item_size + "', " + Item_price 
+//	             + ", 'pending', '', '', '" + User_id + "')";
+
 
 		try {
 			connect.executeUpdate(query);
@@ -32,6 +37,13 @@ public class ItemController {
                 + "item_size = '" + Item_size + "', "
                 + "item_price = " + Item_price
                 + " WHERE item_id = '" + Item_id + "'";
+		
+//		String query = "UPDATE item SET "
+//                + "item_name = '" + Item_name + "', "
+//                + "item_category = '" + Item_category + "', "
+//                + "item_size = '" + Item_size + "', "
+//                + "item_price = " + Item_price
+//                + " WHERE item_id = '" + Item_id + "'";
 
 		try {
 			connect.executeUpdate(query);
@@ -178,8 +190,10 @@ public class ItemController {
 	//ViewSellerItem
 	public ObservableList<Item> ViewSellerItem(String User_id) {
 		ObservableList<Item> itemList = FXCollections.observableArrayList();
-		String query = "SELECT * FROM item WHERE User_id = '" + Integer.parseInt(User_id) + "'";
+		String query = "SELECT * FROM item WHERE User_id = '" + (User_id).toString() + "'";
 		
+		//String query = "SELECT * FROM item WHERE User_id = "?";
+
 		try {
 			connect.resultSet = connect.execute(query);
 			while (connect.resultSet.next()) {

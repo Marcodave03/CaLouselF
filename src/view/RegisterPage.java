@@ -14,7 +14,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.VBox;	
 import javafx.stage.Stage;
 import model.User;
 import util.UserDAO;
@@ -129,14 +129,14 @@ public class RegisterPage {
 	            return;
 	        }
 
-	        userController.register(username, password, phoneNumber, address, role);
+	        boolean success = userController.register(username, password, phoneNumber, address, role);
 
-	        User user = new User(username, password, phoneNumber, address, role);  // Pass the created user object
-	        if (role.equals("Buyer")) {
-	            new BuyerHomePage(primaryStage, user);
-	        } else if(role.equals("Seller")){
-	            new SellerHomePage(primaryStage, user);
-	        }
+	        if (success) {
+                errorLbl.setText("");
+                new LoginPage(primaryStage, userController);
+            } else {
+                errorLbl.setText("Failed to register. Please try again.");
+            }
 		});
 
 		loginLink.setOnAction(e -> {
