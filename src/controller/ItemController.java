@@ -137,21 +137,6 @@ public class ItemController {
 		return itemList;
 	}
 	
-	//7. Offer Price
-	public boolean OfferItem(String Item_id) {
-		String query = "UPDATE item SET item_offer_status = 'true' WHERE Item_id = '" + Item_id + "'";
-		try {
-			connect.executeUpdate(query);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	//8. Accept Offer
-	
-	//9. Decline Offer
 	
 	//10. ApproveItem
 	public boolean ApproveItem(String Item_id) {
@@ -178,11 +163,6 @@ public class ItemController {
 			return false;
 		}
 	}
-	
-	//12. ViewAcceptedItem 
-	
-	//13. ViewOfferItem
-	
 	
 	//ViewSellerItem
 	public ObservableList<Item> ViewSellerItem(String User_id) {
@@ -212,7 +192,6 @@ public class ItemController {
 		return itemList;
 	}
 	
-
 	
 	//CheckDeclineReason
 	public String CheckDeclineReason(String Reason)
