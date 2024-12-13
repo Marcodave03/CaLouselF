@@ -1,6 +1,7 @@
 package view.Seller;
 
 import controller.OfferController;
+import controller.TransactionController;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -33,6 +34,7 @@ public class OfferPage {
     private TableColumn<Offer, Void> actionCol;
 
     private OfferController offerController;
+    private TransactionController transactionController;
     private User user;
 
     private Hyperlink SellerLink;
@@ -41,6 +43,7 @@ public class OfferPage {
     public OfferPage(Stage primaryStage) {
         this.user = SessionManager.getCurrentUser();
         offerController = new OfferController();
+        transactionController =  new TransactionController();
         init();
         arrange();
         eventHandler(primaryStage);
@@ -106,8 +109,10 @@ public class OfferPage {
 
 				acceptBtn.setOnAction(event -> {
 					Offer offer = getTableView().getItems().get(getIndex());
+					System.out.println(offer.getOffer_id() + " " + offer.getItem_id());
 					boolean success = offerController.ApproveOffer(offer.getOffer_id());
 					if(success) {
+						boolean approve =  transactionController.AddTransaction(offer.getItem_id(),offer.getUser_id());
 						 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Approved, Transaction Processed", ButtonType.OK);
 			             alert.showAndWait();
 					}else {
@@ -121,7 +126,7 @@ public class OfferPage {
 					Offer offer = getTableView().getItems().get(getIndex());
 					boolean success = offerController.DeclineOffer(offer.getOffer_id());
 					if(success) {
-						 boolean approve =  offerController.offerTransaction(offer.getOffer_id());
+						 
 						 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Decline Offer", ButtonType.OK);
 			             alert.showAndWait();
 					}else {

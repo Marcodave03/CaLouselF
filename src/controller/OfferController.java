@@ -138,33 +138,6 @@ public class OfferController {
 //			return false;
 //		}
 //	}
-	
-	
-	public boolean offerTransaction(String Offer_id) {
-	    String fetchQuery = "SELECT Item_id, User_id FROM offer WHERE Offer_id = '" + Offer_id + "'";
-	    String insertQuery = "INSERT INTO transaction (Item_id, User_id) VALUES (?, ?)";
-
-	    try {
-	        ResultSet rs = connect.execute(fetchQuery);
-	        if (rs.next()) {
-	            String Item_id = rs.getString("Item_id");
-	            String User_id = rs.getString("User_id");
-	            PreparedStatement ps = connect.preparedStatement(insertQuery);
-	            ps.setString(1, Item_id);
-	            ps.setString(2, User_id);
-	            ps.executeUpdate();
-
-	            return true;
-	        } else {
-	            System.out.println("No offer found with Offer_id: " + Offer_id);
-	            return false;
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-	}
-
 
 
 	
