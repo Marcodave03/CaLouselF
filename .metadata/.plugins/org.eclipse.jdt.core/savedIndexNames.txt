@@ -1,0 +1,2 @@
+INDEX VERSION 1.134+C:\2. Code Repository\200. Projects\JavaFX Project\CaLouselF\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index

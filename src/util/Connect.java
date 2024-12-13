@@ -2,6 +2,7 @@ package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -37,7 +38,7 @@ public class Connect {
 		}
 	}
 	
-	public ResultSet execute (String query) {
+	public ResultSet execute(String query) {
 		try {
 			resultSet = state.executeQuery(query);
 			resultSetMetaData = resultSet.getMetaData();
@@ -60,5 +61,20 @@ public class Connect {
 		}
 		
 		return rowsAffected;
+	}
+
+	public PreparedStatement preparedStatement(String query) {
+		 if (connection == null) {
+		        System.err.println("Database connection is not initialized.");
+		        return null;
+		    }
+		PreparedStatement ps = null;
+		try {
+			ps = connection.prepareStatement(query);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ps;
 	}
 }

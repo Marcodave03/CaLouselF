@@ -8,19 +8,18 @@ public class User {
     private String Address;
     private String Role;
     
-	public User(String user_Id, String username, String password, String phone_Number, String address, String role) {
+	public User(String user_id, String username, String password, String phone_Number, String address, String role) {
 		super();
-		User_id = user_Id;
+		User_id = user_id;
 		Username = username;
 		Password = password;
 		Phone_Number = phone_Number;
 		Address = address;
 		Role = role;
 	}
-
 	
 	public String getUser_id() {
-		return User_id;
+	    return User_id;
 	}
 
 	public void setUser_id(String user_id) {

@@ -14,7 +14,6 @@ public class ItemController {
 		String query = "INSERT INTO item (item_id, item_name, item_category, item_size, item_price, item_status, item_wishlist, item_offer_status, User_id) "
 	             + "VALUES ('0', '" + Item_name + "', '" + Item_category + "', '" + Item_size + "', " + Item_price 
 	             + ", 'pending', '', '', '" + Integer.parseInt(User_id) + "')";
-
 		try {
 			connect.executeUpdate(query);
 			return true;
@@ -138,11 +137,6 @@ public class ItemController {
 		return itemList;
 	}
 	
-	//7. Offer Price
-	
-	//8. Accept Offer
-	
-	//9. Decline Offer
 	
 	//10. ApproveItem
 	public boolean ApproveItem(String Item_id) {
@@ -170,16 +164,13 @@ public class ItemController {
 		}
 	}
 	
-	//12. ViewAcceptedItem 
-	
-	//13. ViewOfferItem
-	
-	
 	//ViewSellerItem
 	public ObservableList<Item> ViewSellerItem(String User_id) {
 		ObservableList<Item> itemList = FXCollections.observableArrayList();
-		String query = "SELECT * FROM item WHERE User_id = '" + Integer.parseInt(User_id) + "'";
+		String query = "SELECT * FROM item WHERE User_id = '" + (User_id).toString() + "'";
 		
+		//String query = "SELECT * FROM item WHERE User_id = "?";
+
 		try {
 			connect.resultSet = connect.execute(query);
 			while (connect.resultSet.next()) {
@@ -201,7 +192,6 @@ public class ItemController {
 		return itemList;
 	}
 	
-
 	
 	//CheckDeclineReason
 	public String CheckDeclineReason(String Reason)

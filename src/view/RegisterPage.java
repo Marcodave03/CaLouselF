@@ -14,9 +14,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.VBox;	
 import javafx.stage.Stage;
 import model.User;
+import util.UserDAO;
 import view.Seller.SellerHomePage;
 
 public class RegisterPage {
@@ -35,6 +36,8 @@ public class RegisterPage {
 	private Label loginLbl;
 	private Hyperlink loginLink;
 	private Label errorLbl;
+	
+	private UserController userController;
 
 	public RegisterPage(Stage primaryStage) {
 		init();
@@ -68,6 +71,9 @@ public class RegisterPage {
 		registerBtn = new Button("Register");
 		loginLbl = new Label("Already have an account?");
 		loginLink = new Hyperlink("Login");
+		UserDAO userDAO = new UserDAO();
+		userController = new UserController(userDAO);
+		
 	}
 
 	private void arrange() {
@@ -111,28 +117,30 @@ public class RegisterPage {
 	private void eventHandler(Stage primaryStage) {
 		registerBtn.setOnAction(e -> {
 			String username = usernameTf.getText();
-			String password = passwordField.getText();
-			String phoneNumber = phoneNumberTf.getText();
-			String address = addressTf.getText();
-			Toggle selectedToggle = roleGroup.getSelectedToggle();
-			String role = (selectedToggle != null) ? ((RadioButton) selectedToggle).getText() : null;
+	        String password = passwordField.getText();
+	        String phoneNumber = phoneNumberTf.getText();
+	        String address = addressTf.getText();
+	        Toggle selectedToggle = roleGroup.getSelectedToggle();
+	        String role = (selectedToggle != null) ? ((RadioButton) selectedToggle).getText() : null;
+	        
+	        String validation = UserController.CheckAccountValidation(username, password, phoneNumber, address, role);
+	        if (!validation.isEmpty()) {
+	            errorLbl.setText(validation);  
+	            return;
+	        }
 
-			String validation = UserController.CheckAccountValidation(username, password, phoneNumber, address, role);
-			if (!validation.isEmpty()) {
-				errorLbl.setText(validation);
-				return;
-			}
-			User user = UserController.Register(username, password, phoneNumber, address, role);
+	        boolean success = userController.register(username, password, phoneNumber, address, role);
 
-			if (user.getRole().equals("Buyer")) {
-				new BuyerHomePage(primaryStage, user);
-			} else  {
-				new SellerHomePage(primaryStage, user);
-			}
+	        if (success) {
+                errorLbl.setText("");
+                new LoginPage(primaryStage, userController);
+            } else {
+                errorLbl.setText("Failed to register. Please try again.");
+            }
 		});
 
 		loginLink.setOnAction(e -> {
-			new LoginPage(primaryStage);
+			new LoginPage(primaryStage, userController);
 		});
 	}
 
