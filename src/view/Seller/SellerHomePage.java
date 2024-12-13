@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -37,6 +38,9 @@ public class SellerHomePage {
 
 	private ItemController itemController;
 	private User user;
+	
+	private Hyperlink SellerLink;
+	private Hyperlink OfferLink;
 
 	public SellerHomePage(Stage primaryStage) {
 		this.user = SessionManager.getCurrentUser();
@@ -61,6 +65,14 @@ public class SellerHomePage {
 		actionCol = new TableColumn<>("Action");
 
 		addItemButton = new Button("Add Item");
+		
+		HBox navbar = new HBox(20);
+		SellerLink = new Hyperlink("All Items");
+	    OfferLink = new Hyperlink("Customer Offer");
+        navbar.getChildren().addAll(SellerLink, OfferLink);
+        navbar.setAlignment(Pos.CENTER);
+        navbar.setPadding(new Insets(10));
+        bp.setTop(navbar);
 	}
 
 	private void arrange() {
@@ -72,10 +84,8 @@ public class SellerHomePage {
 		statusCol.setCellValueFactory(new PropertyValueFactory<>("item_status"));
 
 		itemTable.getColumns().addAll(idCol, nameCol, categoryCol, sizeCol, priceCol, statusCol, actionCol);
-//		Integer userIdInt = Integer.parseInt(user.getUser_id());
 		String userIdString = user.getUser_id();
 		ObservableList<Item> itemList = itemController.ViewSellerItem(userIdString);
-		//ObservableList<Item> itemList = itemController.ViewSellerItem(userIdInt);
 		itemTable.setItems(itemList);
 		if (user.getUser_id() == null || user.getUser_id().isEmpty()) {
 		    System.out.println("User ID failed to pass");
@@ -134,6 +144,15 @@ public class SellerHomePage {
 			    setAlignment(Pos.CENTER);
 			}
 		});
+		
+		SellerLink.setOnAction(e -> {
+            new SellerHomePage(primaryStage);
+        });
+		OfferLink.setOnAction(e -> {
+            new OfferPage(primaryStage);
+        });
+		
+		
 	}
 
 	private void showAddItemForm(Stage parentStage) {

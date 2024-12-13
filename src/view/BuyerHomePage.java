@@ -98,13 +98,23 @@ public class BuyerHomePage {
 	}
 
 	private void eventHandler(Stage primaryStage) {
-//		makeOfferBtn.setOnAction(e -> showMakeOfferForm(primaryStage));
+		//makeOfferBtn.setOnAction(e -> showMakeOfferForm(primaryStage));
 		actionCol.setCellFactory(param -> new TableCell<>() {
 			private final Button purchaseBtn = new Button("Purchase");
 			private final Button offerBtn = new Button("Make Offer");
 			private final Button WishlistBtn = new Button("Add to Wishlist");
 			
 			private final HBox btnBox = new HBox(10, purchaseBtn, offerBtn,WishlistBtn);
+			
+			
+			{
+				btnBox.setAlignment(Pos.CENTER);
+				
+				offerBtn.setOnAction(event->{
+					Item item = getTableView().getItems().get(getIndex());
+					showMakeOfferForm(primaryStage, item, user);
+				});
+			}
 			
 			{
 				btnBox.setAlignment(Pos.CENTER);
@@ -147,7 +157,7 @@ public class BuyerHomePage {
 				            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Purchase Successful!", ButtonType.OK);
 				            alert.showAndWait();
 				        }
-				        getTableView().refresh();
+				        
 				    } else {
 				        Alert alert = new Alert(Alert.AlertType.ERROR, "Error processing the purchase.", ButtonType.OK);
 				        alert.showAndWait();
@@ -188,48 +198,54 @@ public class BuyerHomePage {
         });
 	}
 
-//	private Object showMakeOfferForm(Stage  parentStage) {
-//		Stage formStage = new Stage();
-//		formStage.setTitle("Make Offer");
-//		GridPane formLayout = new GridPane();
-//		formLayout.setPadding(new Insets(10));
-//		formLayout.setHgap(10);
-//		formLayout.setVgap(10);
-//		
-//		Label nameLbl = new Label("Item Name:");
-//		TextField nameTf = new TextField();
-//		
-//		Label categoryLbl = new Label("Price Offer:");
-//		TextField priceTf = new TextField();
-//		
-//		Button submitBtn = new Button("Submit");
-//		
-//		submitBtn.setOnAction(event -> {
-//			String item_name = nameTf.getText();
-//			String item_price = priceTf.getText();
-//			Item item = getTableView().getItems().get(getIndex());
-//
-//			String validationResult = offerController.CheckOfferValidation(item_name, item_price);
-//			if (!validationResult.equals("valid")) {
-//				Alert alert = new Alert(Alert.AlertType.ERROR, validationResult, ButtonType.OK);
-//				alert.show();
-//				return;
-//			}
-//
-//			boolean success = itemController.UploadItem(name, Integer.parseInt(price), user.getUser_id());
-//			if (success) {
-//				itemTable.setItems(itemController.ViewSellerItem(user.getUser_id()));
-//				formStage.close();
-//			}
-//		});
-//		
-//		Scene formScene = new Scene(formLayout, 400, 300);
-//		formStage.setScene(formScene);
-//		formStage.initOwner(parentStage);
-//		formStage.show();
-//		
-//		
-//	}
+	private void showMakeOfferForm(Stage parentStage, Item item, User user) {
+		Stage formStage = new Stage();
+		formStage.setTitle("Make Offer");
+		GridPane formLayout = new GridPane();
+		formLayout.setPadding(new Insets(10));
+		formLayout.setHgap(10);
+		formLayout.setVgap(10);
+		
+		Label nameLbl = new Label("Item Name:");
+		TextField nameTf = new TextField(item.getItem_name());
+		
+		Label priceLbl = new Label("Price Offer:");
+		TextField priceTf = new TextField(item.getItem_price().toString());
+		
+		Button submitBtn = new Button("Submit");
+		
+		submitBtn.setOnAction(event -> {
+			String item_name = nameTf.getText();
+			String item_price = priceTf.getText();
+
+			String validationResult = offerController.CheckOfferValidation(item_name, item_price);
+			if (!validationResult.equals("valid")) {
+				Alert alert = new Alert(Alert.AlertType.ERROR, validationResult, ButtonType.OK);
+				alert.show();
+				return;
+			}
+
+			boolean success = offerController.AddOfferItem(item_name, Integer.parseInt(item_price), item.getItem_id() , user.getUser_id());
+			if (success) {
+				itemTable.setItems(itemController.ViewItem());
+				formStage.close();
+			}
+		});
+		
+		formLayout.add(nameLbl, 0, 0);
+		formLayout.add(nameTf, 1, 0);
+		formLayout.add(priceLbl, 0, 1);
+		formLayout.add(priceTf, 1, 1);
+		formLayout.add(submitBtn, 1, 4);
+		
+		
+		Scene formScene = new Scene(formLayout, 400, 300);
+		formStage.setScene(formScene);
+		formStage.initOwner(parentStage);
+		formStage.show();
+		
+		
+	}
 
 	public Scene getScene() {
 		return scene;
