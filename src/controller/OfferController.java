@@ -13,7 +13,7 @@ public class OfferController {
 	
 	private  Connect connect = Connect.getInstance();
 	
-	
+	//OfferPrice -> menggunakan tabel baru untuk menyimpan bid dari harga berbagai buyer
 	public boolean AddOfferItem(String Item,Integer Price, String Item_id, String User_id) {
 		String query = "INSERT INTO offer (item, price, item_id, user_id) "
                 + "VALUES ('" + Item + "', '" + Price + "', '" + Item_id + "', '" + User_id + "')";
@@ -27,15 +27,14 @@ public class OfferController {
 		}
 	}
 
-	
-	public String CheckOfferValidation(String Item_name,String Item_price) {
-		if (Item_name == null || Item_name.isEmpty()) {
+	//PriceValidation -> memastikan input harus lebih besar dari harga item saat ini 
+	public String CheckOfferValidation(Item item,String Item_price) {
+		if (item == null) {
 			return "Item name cannot be empty.";
 		}
 		try {
-			int priceValue = Integer.parseInt(Item_price);
-			if (priceValue < 0) {
-				return "Price must be a positive number.";
+			if (item.getItem_price() > Integer.parseInt(Item_price)) {
+				return "Price must higher.";
 			}
 		} catch (NumberFormatException e) {
 			return "Price must be a valid number.";
@@ -43,35 +42,7 @@ public class OfferController {
 		return "valid";
 	}
 	
-//	public ObservableList<Offer> ViewOfferedItem(String Offer_id) {
-//		ObservableList<Offer> offerList = FXCollections.observableArrayList();
-//		StringBuilder query = new StringBuilder("SELECT * FROM offer WHERE 1=1");
-//
-//		if (Offer_id != null && !Offer_id.isEmpty()) {
-//			query.append(" AND offer_id = '").append(Offer_id).append("'");
-//			System.out.println("printed 111");
-//		}
-//		
-//		try {
-//			connect.resultSet = connect.execute(query.toString());
-//			while (connect.resultSet.next()) {
-//				String offerid = connect.resultSet.getString("offer_id");
-//				String itemname = connect.resultSet.getString("item");
-//				int price = connect.resultSet.getInt("price");
-//				String userid = connect.resultSet.getString("item_id");
-//				String itemid = connect.resultSet.getString("user_id");
-//
-//				offerList.add(new Offer(offerid, itemname, price, itemid, userid));
-//				System.out.println(offerid +" "+ itemname +" "+ price + " " + userid + " " + itemid);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.out.println("Failed fetch");
-//		}
-//		System.out.println("done");
-//		return offerList;
-//	}
-	
+	//ViewOfferItem
 	public ObservableList<Offer> ViewOfferedItem() {
 	    ObservableList<Offer> offerList = FXCollections.observableArrayList();
 	    String query = "SELECT * FROM offer"; // Fetch all rows from the offer table
@@ -100,7 +71,7 @@ public class OfferController {
 
 	
 	
-	//10. ApproveItem
+	//ApproveOffer -> menyetujui offer dan membuat transaksi
 	public boolean ApproveOffer(String Offer_id) {
 		String query = "DELETE FROM offer WHERE Offer_id = '" + Offer_id + "'";
 
@@ -113,7 +84,7 @@ public class OfferController {
 		}
 	}
 	
-	//11. DeclineItem
+	//DeclineOffer -> menolak offer dan menghapus offer
 	public boolean DeclineOffer(String Offer_id) {
 		String query = "DELETE FROM offer WHERE Offer_id = '" + Offer_id + "'";
 
@@ -126,18 +97,19 @@ public class OfferController {
 		}
 	}
 	
-//	public boolean offerTransaction(String Offer_id) {
-//		
-//		String query = "INSERT INTO transaction (Item_id, User_id)"
-//						+ "VALUES ('"+Item_id+"', '"+User_id+"')";
-//		try {
-//			connect.executeUpdate(query);
-//			return true;
-//		}   catch (Exception e) {
-//			e.printStackTrace();
-//			return false;
-//		}
-//	}
+	//Update price berdasarkan offer
+	public boolean EditPrice(String Item_id, Integer Item_price) {
+		String query = "UPDATE item SET "
+                + "item_price = " + Item_price
+                + " WHERE item_id = '" + Item_id + "'";
+		try {
+			connect.executeUpdate(query);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 
 	

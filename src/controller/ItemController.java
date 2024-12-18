@@ -9,7 +9,7 @@ public class ItemController {
 
 	private  Connect connect = Connect.getInstance();
 
-	//1. Upload Item
+	//UploadItem
 	public boolean UploadItem(String Item_name, String Item_category, String Item_size, Integer Item_price, String User_id) {
 		String query = "INSERT INTO item (item_id, item_name, item_category, item_size, item_price, item_status, item_wishlist, item_offer_status, User_id) "
 	             + "VALUES ('0', '" + Item_name + "', '" + Item_category + "', '" + Item_size + "', " + Item_price 
@@ -23,7 +23,7 @@ public class ItemController {
 		}
 	}
 	
-	//2. EditItem
+	//EditItem
 	public boolean EditItem(String Item_id, String Item_name, String Item_category, String Item_size, Integer Item_price) {
 		String query = "UPDATE item SET "
                 + "item_name = '" + Item_name + "', "
@@ -41,7 +41,7 @@ public class ItemController {
 		}
 	}
 	
-	//3. DeleteItem
+	//DeleteItem
 	public boolean DeleteItem(String Item_id) {
 		String query = "DELETE FROM item WHERE Item_id = '" + Item_id + "'";
 
@@ -55,7 +55,7 @@ public class ItemController {
 	}
 	
 
-	//4. ViewItem
+	//ViewItem 
 	public ObservableList<Item> ViewItem() {
 		ObservableList<Item> itemList = FXCollections.observableArrayList();
 		String query = "SELECT * FROM item WHERE item_status = 'approved'";
@@ -81,7 +81,7 @@ public class ItemController {
 		return itemList;
 	}
 	
-	//5. CheckItemValidation
+	//CheckItemValidation
 	public String CheckItemValidation(String Item_name, String Item_category, String Item_size,
 			String Item_price) {
 		if (Item_name == null || Item_name.isEmpty()) {
@@ -104,7 +104,7 @@ public class ItemController {
 		return "valid";
 	}
 	
-	//6. ViewRequestedItem
+	//ViewRequestedItem
 	public ObservableList<Item> ViewRequestedItem(String Item_id, String Item_status) {
 		ObservableList<Item> itemList = FXCollections.observableArrayList();
 		StringBuilder query = new StringBuilder("SELECT * FROM item WHERE 1=1");
@@ -138,7 +138,7 @@ public class ItemController {
 	}
 	
 	
-	//10. ApproveItem
+	//ApproveItem
 	public boolean ApproveItem(String Item_id) {
 		String query = "UPDATE item SET item_status = 'approved' WHERE Item_id = '" + Item_id + "'";
 
@@ -151,7 +151,7 @@ public class ItemController {
 		}
 	}
 	
-	//11. DeclineItem
+	//DeclineItem
 	public boolean DeclineItem(String Item_id) {
 		String query = "DELETE FROM item WHERE Item_id = '" + Item_id + "'";
 
@@ -164,7 +164,7 @@ public class ItemController {
 		}
 	}
 	
-	//ViewSellerItem
+	//ViewAcceptedItem
 	public ObservableList<Item> ViewSellerItem(String User_id) {
 		ObservableList<Item> itemList = FXCollections.observableArrayList();
 		String query = "SELECT * FROM item WHERE User_id = '" + (User_id).toString() + "'";

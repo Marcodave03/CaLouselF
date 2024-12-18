@@ -80,7 +80,6 @@ public class WishListPage {
 		priceCol.setCellValueFactory(new PropertyValueFactory<>("item_price"));
 
 		ObservableList<Item> itemList = wishlistController.ViewWishlist(user.getUser_id());
-		//ObservableList<Item> itemList = itemController.ViewItem();
 		itemTable.setItems(itemList);
 		System.out.println("User ID: " + user.getUser_id());
 		vb = new VBox(10, itemTable);
@@ -101,10 +100,11 @@ public class WishListPage {
 	                if (success) {
 	                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Removed from wishlist!", ButtonType.OK);
 	                    alert.showAndWait();
-	                    getTableView().refresh(); // Refresh the table to show the updated list
+	                    getTableView().getItems().remove(getIndex()); // Refresh tabel
 	                } else {
 	                    Alert alert = new Alert(Alert.AlertType.ERROR, "Error removing item from wishlist.", ButtonType.OK);
 	                    alert.showAndWait();
+	                    getTableView().getItems().remove(getIndex());
 	                }
 	            });
 	        }

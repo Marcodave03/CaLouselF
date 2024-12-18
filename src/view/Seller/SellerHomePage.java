@@ -94,7 +94,6 @@ public class SellerHomePage {
 		}
 		System.out.println("User being passed to SellerPage: " + user.getRole());
 		System.out.println("User being passed to SellerPage: " + user.getUsername());
-		//System.out.println("User ID  being passed to SellerPage: " + userIdString);
 		vb = new VBox(10, addItemButton, itemTable);
 		vb.setPadding(new Insets(10));
 		bp.setCenter(vb);

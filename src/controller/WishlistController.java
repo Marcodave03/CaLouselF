@@ -7,7 +7,7 @@ import util.Connect;
 
 public class WishlistController {
 	private  Connect connect = Connect.getInstance();
-	//1. Add Wishlist
+	//AddWishlistItem
 	public boolean AddWishlist(String Item_id, String User_id) {
 		String query = "INSERT INTO wishlist (Item_id, User_id)"
 						+ "VALUES ('"+Item_id+"', '"+User_id+"')";
@@ -20,7 +20,7 @@ public class WishlistController {
 		}
 	}
 	
-	//ID Available User and Wishlist
+	//RemoveWishlist
 	public boolean RemoveWishlist(String User_id, String Item_id) {
 		String query = "DELETE FROM wishlist WHERE Item_id = '" + Item_id +"' AND User_id = '"+ User_id +"'";
 		System.out.println(query);
@@ -33,6 +33,7 @@ public class WishlistController {
 		}
 	}
 	
+	//CheckWishist
 	public boolean CheckWishlist(String User_id, String Item_id) {
 		String query = "SELECT * FROM wishlist WHERE Item_id = '" + Item_id +"' AND User_id = '"+ User_id +"'";
 		System.out.println(query);
@@ -45,6 +46,7 @@ public class WishlistController {
 		}
 	}
 
+	//ViewWishist 
 	public ObservableList<Item> ViewWishlist(String User_id) {
 	    ObservableList<Item> itemList = FXCollections.observableArrayList(); 
 	    String query = "SELECT i.* FROM item i " +

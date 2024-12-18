@@ -112,14 +112,15 @@ public class OfferPage {
 					System.out.println(offer.getOffer_id() + " " + offer.getItem_id());
 					boolean success = offerController.ApproveOffer(offer.getOffer_id());
 					if(success) {
-						boolean approve =  transactionController.AddTransaction(offer.getItem_id(),offer.getUser_id());
+						 boolean nicee = offerController.EditPrice(offer.getItem_id(), offer.getPrice());
+						 boolean nice = transactionController.AddTransaction(offer.getItem_id(),offer.getUser_id());
 						 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Approved, Transaction Processed", ButtonType.OK);
 			             alert.showAndWait();
+			             getTableView().getItems().remove(offer);
 					}else {
 						 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Error", ButtonType.OK);
 				         alert.showAndWait();
 					}
-					getTableView().refresh();
 				});
 
 				declineBtn.setOnAction(event -> {
@@ -129,6 +130,7 @@ public class OfferPage {
 						 
 						 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Decline Offer", ButtonType.OK);
 			             alert.showAndWait();
+			             getTableView().getItems().remove(offer);
 					}else {
 						 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Error", ButtonType.OK);
 				         alert.showAndWait();

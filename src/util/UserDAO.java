@@ -9,6 +9,7 @@ import model.User;
 public class UserDAO {
 	private Connect connect = Connect.getInstance();
 	
+	//Insert register user ke dalam database
 	public void register(User user) {
 		String query =  "INSERT INTO users (Username, Password, Phone_Number, Address, Role) VALUES (?, ?, ?, ?, ?)";
 		PreparedStatement ps = connect.preparedStatement(query);
@@ -24,7 +25,7 @@ public class UserDAO {
 		}
 	}
 	
-	
+	//tidak digunakan
 	public String getId() {
 		try {
 			String getIdQuery = "SELECT LAST_INSERT_ID() AS user_id";
@@ -38,7 +39,7 @@ public class UserDAO {
 		return null;
 	}
 
-	
+	//untuk mendapatkan username dan password apakah sesuai dengan input
 	public User login(String username, String password) {
 		if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
 	        return null;

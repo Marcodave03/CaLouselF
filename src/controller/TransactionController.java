@@ -7,7 +7,8 @@ import util.Connect;
 
 public class TransactionController {
 	private  Connect connect = Connect.getInstance();
-	//1. Purchase
+	
+	//PurchaseItem atau CreateTransaction untuk membuat transaksi baru dari pembelian user 
 	public boolean AddTransaction(String Item_id, String User_id) {
 		String query = "INSERT INTO transaction (Item_id, User_id)"
 						+ "VALUES ('"+Item_id+"', '"+User_id+"')";
@@ -19,7 +20,8 @@ public class TransactionController {
 			return false;
 		}
 	}
-
+	
+	//ViewHistory -> History transaksi 
 	public ObservableList<Item> Transactionlist(String User_id) {
 	    ObservableList<Item> itemList = FXCollections.observableArrayList(); 
 	    String query = "SELECT i.* FROM item i " +

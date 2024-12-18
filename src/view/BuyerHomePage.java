@@ -3,6 +3,7 @@ package view;
 import controller.ItemController;
 import controller.OfferController;
 import controller.TransactionController;
+import controller.UserController;
 import controller.WishlistController;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -26,6 +27,7 @@ import javafx.stage.Stage;
 import model.Item;
 import model.User;
 import session.SessionManager;
+import util.UserDAO;
 
 public class BuyerHomePage {
 	private Scene scene;
@@ -46,6 +48,9 @@ public class BuyerHomePage {
 	private Hyperlink AllItemLink;
 	private Hyperlink TransactionLink;
 	private Button makeOfferBtn;
+	private Hyperlink logoutBtn;
+	private UserController userController;
+	private UserDAO userDAO;
 
 
 	public BuyerHomePage(Stage primaryStage) {
@@ -54,6 +59,7 @@ public class BuyerHomePage {
 		wishlistController = new WishlistController();
 		transactionController = new TransactionController();
 		offerController = new OfferController();
+		userController = new UserController(userDAO);
 		init();
 		arrange();
 		eventHandler(primaryStage);
@@ -75,7 +81,8 @@ public class BuyerHomePage {
 		WishlistLink = new Hyperlink("Wishlist");
 	    AllItemLink = new Hyperlink("All Items");
 	    TransactionLink = new Hyperlink("Transaction History");
-        navbar.getChildren().addAll(AllItemLink, WishlistLink, TransactionLink);
+	    logoutBtn = new Hyperlink("Logout");
+        navbar.getChildren().addAll(AllItemLink, WishlistLink, TransactionLink,logoutBtn);
         navbar.setAlignment(Pos.CENTER);
         navbar.setPadding(new Insets(10));
         bp.setTop(navbar);
@@ -98,7 +105,6 @@ public class BuyerHomePage {
 	}
 
 	private void eventHandler(Stage primaryStage) {
-		//makeOfferBtn.setOnAction(e -> showMakeOfferForm(primaryStage));
 		actionCol.setCellFactory(param -> new TableCell<>() {
 			private final Button purchaseBtn = new Button("Purchase");
 			private final Button offerBtn = new Button("Make Offer");
@@ -196,6 +202,10 @@ public class BuyerHomePage {
 		TransactionLink.setOnAction(e -> {
             new TransactionHistoryPage(primaryStage);
         });
+		logoutBtn.setOnAction(e -> {
+			userController.logout();
+            new LoginPage(primaryStage,userController);
+        });
 	}
 
 	private void showMakeOfferForm(Stage parentStage, Item item, User user) {
@@ -218,7 +228,7 @@ public class BuyerHomePage {
 			String item_name = nameTf.getText();
 			String item_price = priceTf.getText();
 
-			String validationResult = offerController.CheckOfferValidation(item_name, item_price);
+			String validationResult = offerController.CheckOfferValidation(item, item_price);
 			if (!validationResult.equals("valid")) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, validationResult, ButtonType.OK);
 				alert.show();
@@ -243,8 +253,6 @@ public class BuyerHomePage {
 		formStage.setScene(formScene);
 		formStage.initOwner(parentStage);
 		formStage.show();
-		
-		
 	}
 
 	public Scene getScene() {
